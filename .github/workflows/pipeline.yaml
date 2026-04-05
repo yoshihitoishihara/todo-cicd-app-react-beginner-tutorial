@@ -36,6 +36,7 @@ jobs:
     test:
       name: Test Phase
       runs-on: ubuntu-latest
+      needs: build
 
       steps:
         - name: Checkout code
