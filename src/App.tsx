@@ -48,11 +48,15 @@ function App() {
   const handleToggleTodo = async (id: string) => {
     const todo = todos.find((t) => t.id === id);
     if (todo) {
+      setTodos((prev) =>
+        prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
+      );
       await updateDoc(doc(db, "todos", id), { completed: !todo.completed });
     }
   };
 
   const handleDeleteTodo = async (id: string) => {
+    setTodos((prev) => prev.filter((t) => t.id !== id));
     await deleteDoc(doc(db, "todos", id));
   };
 
