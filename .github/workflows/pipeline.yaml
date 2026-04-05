@@ -82,7 +82,7 @@ jobs:
 
         - name: Prepare Google Application Credentials
           run: | 
-            echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} | base64 --decode > HOME/private_key.json  
+            echo ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }} | base64 --decode > $HOME/private_key.json
             
         - name: Deploy Firebase
           run: |
