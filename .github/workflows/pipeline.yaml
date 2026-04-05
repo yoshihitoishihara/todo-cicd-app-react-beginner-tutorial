@@ -88,7 +88,7 @@ jobs:
           run: |
            export GOOGLE_APPLICATION_CREDENTIALS="$HOME/private_key.json"
            firebase experiments:enable webframeworks
-           forebase deploy --only hosting
+           firebase deploy --only hosting
 
         - name: Remove private key
           if: always()
