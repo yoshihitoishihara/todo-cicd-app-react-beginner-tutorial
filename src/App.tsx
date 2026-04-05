@@ -34,7 +34,7 @@ function App() {
       <div className="max-w-md mx-auto">
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h1 className="text-3xl font-bold text-center text-gray-800 mb-6">
-            Todoアプリ!
+            買い物メモアプリ!
           </h1>
 
           <div className="flex gap-2 mb-6">

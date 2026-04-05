@@ -6,7 +6,7 @@ describe("App", () => {
     test("アプリタイトルが表示されている", () => {
         render(<App />);
         expect(
-            screen.getByRole("heading", { name: "Todoアプリ!" })
+            screen.getByRole("heading", { name: "買い物メモアプリ!" })
         ).toBeInTheDocument();
     });
 
