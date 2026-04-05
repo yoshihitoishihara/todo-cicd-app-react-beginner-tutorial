@@ -1,7 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { db } from "./firebase";
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  updateDoc,
+  query,
+  orderBy,
+  serverTimestamp,
+} from "firebase/firestore";
 
 type Todo = {
-  id: number;
+  id: string;
   title: string;
   completed: boolean;
 };
@@ -10,23 +22,38 @@ function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [title, setTitle] = useState("");
 
-  const handleAddTodo = () => {
+  useEffect(() => {
+    const q = query(collection(db, "todos"), orderBy("createdAt"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const todosData = snapshot.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as Omit<Todo, "id">),
+      }));
+      setTodos(todosData);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleAddTodo = async () => {
     if (title.trim()) {
-      setTodos([...todos, { id: todos.length + 1, title, completed: false }]);
+      await addDoc(collection(db, "todos"), {
+        title: title.trim(),
+        completed: false,
+        createdAt: serverTimestamp(),
+      });
       setTitle("");
     }
   };
 
-  const handleToggleTodo = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+  const handleToggleTodo = async (id: string) => {
+    const todo = todos.find((t) => t.id === id);
+    if (todo) {
+      await updateDoc(doc(db, "todos", id), { completed: !todo.completed });
+    }
   };
 
-  const handleDeleteTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+  const handleDeleteTodo = async (id: string) => {
+    await deleteDoc(doc(db, "todos", id));
   };
 
   return (
